@@ -1,0 +1,21 @@
+// embeddings.proto
+syntax = "proto3";
+
+package embeddings;
+
+// The Embedding service definition.
+service EmbeddingService {
+  // Generates an embedding from a raw image
+  rpc GetEmbedding (EmbeddingRequest) returns (EmbeddingResponse);
+}
+
+// Request message containing the image data
+message EmbeddingRequest {
+  bytes image_data = 1; // Raw image bytes (e.g., JPEG or PNG)
+}
+
+// Response message containing the generated embedding
+message EmbeddingResponse {
+  repeated float embedding = 1; // Normalized embedding vector
+  string status = 2;            // Optional status message
+}

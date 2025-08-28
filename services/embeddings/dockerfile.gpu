@@ -1,0 +1,25 @@
+# 1. Use an official NVIDIA base image with CUDA and cuDNN
+FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
+
+# 2. Set up the working environment
+WORKDIR /app
+
+# Install Python and other system dependencies
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# 3. Copy and install Python requirements
+COPY requirements.txt .
+# Make sure requirements.txt lists "onnxruntime-gpu"
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# 4. Copy the rest of your application code
+COPY . .
+
+# 5. Define the command to run your application (e.g., the gRPC server)
+# The port 50051 is standard for gRPC
+EXPOSE 50051
+CMD ["python3", "your_grpc_server_file.py"]
