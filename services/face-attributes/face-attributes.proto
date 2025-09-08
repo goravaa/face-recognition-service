@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package faceattributes;
+
+// --- Request message ---
+message AttributeRequest {
+  bytes image_data = 1; // raw image bytes (JPEG/PNG)
+}
+
+// --- Response message ---
+message AttributeResponse {
+  string status = 1; // "success" or "error"
+
+  // Optional error details
+  string error_message = 2;
+
+  // Predicted attributes
+  string race = 3;
+  string gender = 4;
+  int32 age = 5;
+
+  // confidence scores
+  map<string, float> race_probs = 6;
+  map<string, float> gender_probs = 7;
+  map<string, float> age_probs = 8;
+}
+
+// --- Service ---
+service AttributeService {
+  rpc GetAttributes(AttributeRequest) returns (AttributeResponse);
+}

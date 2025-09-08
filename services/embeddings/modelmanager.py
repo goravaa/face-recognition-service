@@ -72,29 +72,25 @@ class ModelManager:
                 logger.info("Model downloaded successfully.")
             except Exception as e:
                 logger.critical(f"FATAL: Failed to download model: {e}")
-                # Exit the application as it cannot function without the model
                 sys.exit(1) 
 
     def _preprocess(self, image_np: np.ndarray) -> np.ndarray:
-        logger.info("Starting image preprocessing.")
+       
 
-        # Stage 1: Resize the image
+      
         target_size = (self.input_width, self.input_height)
-        logger.info(f"Resizing image to target size: {target_size}")
+
         image_np = cv2.resize(image_np, target_size)
         logger.info(f"After resizing, image shape: {image_np.shape}")
         
-        # Stage 2: Convert BGR to RGB
         logger.info("Converting image from BGR to RGB color space.")
         image_rgb = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
         logger.info(f"After color conversion, image shape: {image_rgb.shape}")
         
-        # Stage 3: Normalize the pixel values
         logger.info("Normalizing image pixel values.")
         normalized_image = (image_rgb.astype(np.float32) - 127.5) / 128.0
         logger.info(f"After normalization, image shape: {normalized_image.shape}")
         
-        # Stage 4: Add a new axis for the batch dimension
         logger.info("Adding batch dimension to the image.")
         preprocessed = normalized_image[np.newaxis, :, :, :]
         logger.info(f"Final preprocessed image shape: {preprocessed.shape}")
